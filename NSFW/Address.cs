@@ -6,7 +6,7 @@ namespace NSFW
     internal static class Address
     {
         public static IPAddress DefaultIP { get => GetLocal(); }
-        public static int DefaultPort { get => 10000; }
+        public const int DefaultPort = 10000;
 
         public static IPAddress GetGlobal()
         {
