@@ -14,7 +14,7 @@ bool isCorrectIP = IPAddress.TryParse(ip, out IPAddress? address);
 
 if (!isCorrectIP || address == null)
 {
-    Console.WriteLine("Invalid IP specified. Using localhost address...");
+    Console.WriteLine("Invalid IP specified. Using local address...");
     address = Address.DefaultIP;
 }
 Console.WriteLine($"Connecting to {address}...");

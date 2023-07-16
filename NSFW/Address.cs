@@ -5,7 +5,7 @@ namespace NSFW
 {
     internal static class Address
     {
-        public static IPAddress DefaultIP { get => IPAddress.Loopback; }
+        public static IPAddress DefaultIP { get => GetLocal(); }
         public static int DefaultPort { get => 10000; }
 
         public static IPAddress GetGlobal()
@@ -19,7 +19,7 @@ namespace NSFW
             IPAddress address;
             using (var socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
             {
-                socket.Connect("8.8.8.8", 65530);
+                socket.Connect("8.8.8.8", DefaultPort);
                 IPEndPoint? endPoint = (IPEndPoint?)socket.LocalEndPoint;
                 address = endPoint?.Address ?? DefaultIP;
             }
