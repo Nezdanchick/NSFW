@@ -47,7 +47,7 @@ namespace NSFW
             Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             Socket.Bind(ipPoint);
             Socket.Listen();
-            Console.WriteLine($"Server started on {Address.GetLocal()}:{ipPoint.Port}\nWaiting...");
+            Console.WriteLine($"Server started on {Address.GetLocal()}:{Address.GetPort(Socket.LocalEndPoint)}\nWaiting...");
 
             using Socket client = Socket.Accept();
             Console.WriteLine($"Client address: {client.RemoteEndPoint}");

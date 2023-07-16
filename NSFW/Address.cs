@@ -25,5 +25,10 @@ namespace NSFW
             }
             return address;
         }
+        public static int GetPort(EndPoint? endPoint)
+        {
+            var port = endPoint?.ToString()?.Split(':')[1] ?? "0";
+            return int.Parse(port);
+        }
     }
 }
