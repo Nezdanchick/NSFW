@@ -5,15 +5,13 @@ namespace NSFW
 {
     internal static class Address
     {
-        public static IPAddress DefaultIP { get => GetLocal(); }
+        public static IPAddress LocalIP { get => GetLocal(); }
         public const int DefaultPort = 0;
 
-        public static IPAddress GetGlobal()
-        {
-            string ip = new HttpClient().GetStringAsync("https://api.ipify.org").Result;
-            IPAddress? address = IPAddress.Parse(ip);
-            return address ?? DefaultIP;
-        }
+        /// <summary>
+        /// Get local ip address
+        /// </summary>
+        /// <returns></returns>
         public static IPAddress GetLocal()
         {
             IPAddress address;
@@ -21,14 +19,31 @@ namespace NSFW
             {
                 socket.Connect("8.8.8.8", DefaultPort);
                 IPEndPoint? endPoint = (IPEndPoint?)socket.LocalEndPoint;
-                address = endPoint?.Address ?? DefaultIP;
+                address = endPoint?.Address ?? LocalIP;
             }
             return address;
         }
+        /// <summary>
+        /// Get port from end point
+        /// </summary>
+        /// <param name="endPoint"></param>
+        /// <returns></returns>
+        public static IPAddress GetAddress(EndPoint? endPoint)
+        {
+            var point = endPoint as IPEndPoint;
+            var address = point?.Address;
+            return address ?? LocalIP;
+        }
+        /// <summary>
+        /// Get port from end point
+        /// </summary>
+        /// <param name="endPoint"></param>
+        /// <returns></returns>
         public static int GetPort(EndPoint? endPoint)
         {
-            var port = endPoint?.ToString()?.Split(':')[1] ?? "0";
-            return int.Parse(port);
+            var point = endPoint as IPEndPoint;
+            var port = point?.Port;
+            return port ?? DefaultPort;
         }
     }
 }
