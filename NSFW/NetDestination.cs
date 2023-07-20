@@ -4,7 +4,7 @@ namespace NSFW
 {
     public class NetDestination : IDisposable
     {
-        public Socket? Socket { get; set; } = new(SocketType.Stream, ProtocolType.Tcp);
+        internal Socket? Socket { get; set; } = new(SocketType.Stream, ProtocolType.Tcp);
 
         public void Dispose()
         {

@@ -26,15 +26,14 @@ namespace NSFW
             return address;
         }
         /// <summary>
-        /// Get port from end point
+        /// Get address from end point
         /// </summary>
         /// <param name="endPoint"></param>
         /// <returns></returns>
         public static IPAddress GetAddress(EndPoint? endPoint)
         {
-            var point = endPoint as IPEndPoint;
-            var address = point?.Address;
-            return address ?? LocalIP;
+            var point = (IPEndPoint?)endPoint;
+            return point?.Address ?? LocalIP;
         }
         /// <summary>
         /// Get port from end point

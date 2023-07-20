@@ -4,6 +4,11 @@ namespace NSFW
 {
     public static class DataExchange
     {
+        /// <summary>
+        /// Value, represents availability of data on the socket
+        /// </summary>
+        /// <param name="socket"></param>
+        /// <returns></returns>
         public static bool IsAvailable(this Socket socket) =>
             socket.Available > 0;
 
