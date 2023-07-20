@@ -1,12 +1,14 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Sockets;
 
 namespace NSFW
 {
-    internal static class Address
+    public static class Address
     {
         public static IPAddress LocalIP { get => GetLocal(); }
-        public const int DefaultPort = 0;
+        public const int DefaultPort = 8888;
+        public static IPEndPoint DefaultEndPoint { get => new(LocalIP, DefaultPort); }
 
         /// <summary>
         /// Get local ip address
@@ -41,9 +43,8 @@ namespace NSFW
         /// <returns></returns>
         public static int GetPort(EndPoint? endPoint)
         {
-            var point = endPoint as IPEndPoint;
-            var port = point?.Port;
-            return port ?? DefaultPort;
+            var point = (IPEndPoint?)endPoint;
+            return point?.Port ?? DefaultPort;
         }
     }
 }
