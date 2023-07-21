@@ -1,9 +1,15 @@
 ﻿using System.Net;
+using System.Net.Sockets;
 
 namespace NSFW.Destination
 {
     public class Client : NetDestination
     {
+        public string? Name { get; private set; }
+
+        public Client() : base() { }
+        public Client(Socket socket) : base(socket) { }
+
         public User Connect(string? endPoint)
         {
             _ = IPEndPoint.TryParse(endPoint ?? "", out IPEndPoint? address);
@@ -11,10 +17,9 @@ namespace NSFW.Destination
             try
             {
                 Socket?.Connect(address);
-                Thread.Sleep(500);
             }
             catch (Exception) { }
-            return new User("User", address);
+            return new User("smb");
         }
     }
 }

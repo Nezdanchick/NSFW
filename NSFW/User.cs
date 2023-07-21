@@ -1,21 +1,16 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using NSFW.Destination;
+﻿using NSFW.Destination;
 
 namespace NSFW
 {
     public class User : IDisposable
     {
-        public static List<User> All { get; } = new List<User>();
         public static User Current { get; } = // Singletone
-            new User(Environment.UserName, Address.LocalIP, Address.DefaultPort);
+            new User(Environment.UserName);
 
-        public string Name { get; private set; } = "User";
-        public IPAddress IPAddress { get; private set; } = Address.LocalIP;
-        public int Port { get; private set; }
-        public IPEndPoint IPEndPoint { get => new(IPAddress, Port); }
+        public string Name { get => Client.Name ?? _name; set => _name = value; }
+        private string _name = "User";
 
-        public Socket? Socket => IsClient ? Client.Socket : Server.Socket;
+        #region Client Server
         public bool IsClient;
 
         public Client Client
@@ -41,6 +36,7 @@ namespace NSFW
 
         private Client _client = new();
         private Server _server = new();
+        #endregion
 
         #region Constructors
         internal User()
@@ -50,24 +46,27 @@ namespace NSFW
             // ProcessExit on CancelKeyPress event
             AppDomain.CurrentDomain.ProcessExit +=
                 (object? sender, EventArgs e) => Dispose();
-            // Dispose() on Exit(0) or Cancel
-            All.Add(this);
+            // Dispose() on ProcessExit or CancelKeyPress
         }
-        internal User(string name, IPAddress address, int port) : this()
-        {
+        internal User(string name) : this() =>
             Name = name;
-            IPAddress = address;
-            Port = port;
+        #endregion
+
+        public void Send(byte[] data)
+        {
+            if (IsClient)
+                Client.Send(data);
+            else
+                Server.Send(data);
         }
-        internal User(string name, EndPoint endPoint)
-            : this(name, Address.GetAddress(endPoint), Address.GetPort(endPoint)) { }
-        #endregion
-        #region Data Exchange
-        public void Send(byte[] data) =>
-            DataExchange.Send(Socket, data);
-        public byte[]? Receive() =>
-            DataExchange.Receive(Socket);
-        #endregion
+
+        public byte[]? Receive()
+        {
+            if (IsClient)
+                return Client.Receive();
+            else
+                return Server.Receive();
+        }
 
         public void Dispose()
         {
@@ -82,6 +81,6 @@ namespace NSFW
         }
 
         public override string ToString() =>
-            $"Name: {Name}\nEnd: {IPEndPoint}";
+            $"User {Name}";
     }
 }

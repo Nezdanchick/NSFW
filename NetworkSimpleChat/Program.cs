@@ -1,7 +1,6 @@
 ﻿using NSFW;
 
 var me = User.Current;
-User other;
 
 Console.WriteLine("Type 's' to start server, else client will be started");
 me.IsClient = Console.ReadKey(true).KeyChar != 's';
@@ -13,7 +12,7 @@ if (me.IsClient)
 
     Console.Write("Write address to connect: ");
     var endPoint = Console.ReadLine()?.Trim();
-    other = me.Client.Connect(endPoint);
+    var other = me.Client.Connect(endPoint);
     Console.WriteLine("Connecting...");
 
     Info(other);
@@ -32,9 +31,9 @@ else
 
     var address = me.Server.Start();
     Console.WriteLine(address);
-    Console.WriteLine("Connecting...");
-    other = me.Server.Listen();
 
+    Console.WriteLine("Waiting client...");
+    var other = me.Server.Listen();
     Info(other);
 
     string? line = "";

@@ -5,6 +5,8 @@ namespace NSFW.Destination
 {
     public class Server : NetDestination
     {
+        public List<Client> Clients { get; } = new();
+
         public bool IsStarted { get; private set; } = false;
 
         public IPEndPoint Start() =>
@@ -29,14 +31,37 @@ namespace NSFW.Destination
             Socket.Listen();
 
             Socket client = Socket.Accept();
-            Thread.Sleep(500);
 
             if (client.RemoteEndPoint == null)
                 throw new Exception("Client is null");
 
-            Socket = client;
+            Clients.Add(new Client(client));
 
-            return new User("User", client.RemoteEndPoint);
+            return new User("smb");
+        }
+        /// <summary>
+        /// Send data to all clients
+        /// </summary>
+        /// <param name="data"></param>
+        public new void Send(byte[] data)
+        {
+            foreach (Client client in Clients)
+                DataExchange.Send(client.Socket, data);
+        }
+        /// <summary>
+        /// Get data from all clients
+        /// </summary>
+        /// <returns></returns>
+        public new byte[] Receive()
+        {
+            var bytes = new List<byte>();
+            foreach (Client client in Clients)
+            {
+                var range = DataExchange.Receive(client.Socket);
+                if (range != null)
+                    bytes.AddRange(range);
+            }
+            return bytes.ToArray();
         }
     }
 }
