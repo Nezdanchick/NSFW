@@ -12,13 +12,17 @@ namespace NSFW.Destination
 
         public User Connect(string? endPoint)
         {
-            _ = IPEndPoint.TryParse(endPoint ?? "", out IPEndPoint? address);
-            address ??= Address.DefaultEndPoint;
             try
             {
+                var address = IPEndPoint.Parse(endPoint ?? "");
                 Socket?.Connect(address);
             }
-            catch (Exception) { }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                Thread.Sleep(2000);
+                Environment.Exit(-1);
+            }
             return new User("smb");
         }
     }

@@ -21,12 +21,10 @@ namespace NSFW.Destination
             return new IPEndPoint(address, port);
         }
 
-        public User Listen()
+        public void Listen()
         {
-            if (Socket == null)
+            if (Socket == null || !IsStarted)
                 throw new Exception("Can't listen: socket is null");
-            if (!IsStarted)
-                Start(Address.DefaultPort);
 
             Socket.Listen();
 
@@ -36,8 +34,17 @@ namespace NSFW.Destination
                 throw new Exception("Client is null");
 
             Clients.Add(new Client(client));
-
-            return new User("smb");
+        }
+        public void ListenAsync()
+        {
+            Task.Run(() =>
+            {
+                while (true)
+                {
+                    Listen();
+                    Task.Delay(1000);
+                }
+            });
         }
         /// <summary>
         /// Send data to all clients
@@ -45,23 +52,27 @@ namespace NSFW.Destination
         /// <param name="data"></param>
         public new void Send(byte[] data)
         {
-            foreach (Client client in Clients)
-                DataExchange.Send(client.Socket, data);
+            for (int i = 0; i < Clients.Count; i++)
+                DataExchange.Send(Clients[i].Socket, data);
         }
         /// <summary>
         /// Get data from all clients
         /// </summary>
         /// <returns></returns>
-        public new byte[] Receive()
+        public new byte[]? Receive()
         {
-            var bytes = new List<byte>();
-            foreach (Client client in Clients)
+            for (int i = 0; i < Clients.Count; i++)
             {
-                var range = DataExchange.Receive(client.Socket);
-                if (range != null)
-                    bytes.AddRange(range);
+                var data = DataExchange.Receive(Clients[i].Socket);
+                if (data != null)
+                    return data;
             }
-            return bytes.ToArray();
+            return null;
+        }
+        public new void Dispose()
+        {
+            IsStarted = false;
+            base.Dispose();
         }
     }
 }

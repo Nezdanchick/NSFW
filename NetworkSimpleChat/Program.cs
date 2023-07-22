@@ -21,8 +21,17 @@ if (me.IsClient)
     string line = "";
     while (line != "exit")
     {
-        line = Console.ReadLine() ?? "";
-        me.Send(line.Bytes());
+        if (Console.KeyAvailable)
+        {
+            line = Console.ReadLine() ?? "";
+            me.Send(line.Bytes());
+        }
+
+        var data = me.Receive();
+        if (data == null)
+            continue;
+        line = data.String();
+        Console.WriteLine(line);
     }
 }
 else
@@ -30,18 +39,21 @@ else
     // Server
 
     var address = me.Server.Start();
+    SimpleChat.Clipboard.SetText(address.ToString());
     Console.WriteLine(address);
 
-    Console.WriteLine("Waiting client...");
-    var other = me.Server.Listen();
-    Info(other);
+    me.Server.ListenAsync();
+    Console.WriteLine("Messages of connected clients:");
 
     string? line = "";
     while (line != "exit")
     {
-        line = me.Receive()?.String();
-        if (line != "")
-            Console.WriteLine(line);
+        var data = me.Receive();
+        if (data == null)
+            continue;
+        line = data.String();
+        me.Send(data);
+        Console.WriteLine(line);
     }
 }
 

@@ -35,12 +35,15 @@ namespace NSFW
             {
                 while (socket.IsAvailable())
                 {
-                    socket.Receive(buffer, SocketFlags.None);
-                    result.Add(buffer[0]);
+                    int received = socket.Receive(buffer);
+                    if (received != 0)
+                        result.Add(buffer[0]);
                 }
             }
             catch (Exception) { }
 
+            if (result.Count == 0)
+                return null;
             return result.ToArray();
         }
     }
