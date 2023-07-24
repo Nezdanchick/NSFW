@@ -1,13 +1,13 @@
 ﻿using System.Net.Sockets;
 
-namespace NSFW
+namespace NSFW.Sockets
 {
-    public class NetDestination : IDisposable
+    public class TcpSocket : IDisposable
     {
         internal Socket? Socket { get; set; } = new(SocketType.Stream, ProtocolType.Tcp);
 
-        public NetDestination() { }
-        public NetDestination(Socket socket) =>
+        public TcpSocket() { }
+        public TcpSocket(Socket socket) =>
             Socket = socket;
 
         public void Send(byte[] data) =>

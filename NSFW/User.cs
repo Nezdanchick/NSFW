@@ -1,4 +1,4 @@
-﻿using NSFW.Destination;
+﻿using NSFW.Sockets;
 
 namespace NSFW
 {

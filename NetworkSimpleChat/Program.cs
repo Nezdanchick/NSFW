@@ -3,7 +3,7 @@
 var me = User.Current;
 
 Console.WriteLine("Type 's' to start server, else client will be started");
-me.IsClient = Console.ReadKey(true).KeyChar != 's';
+me.IsClient = Console.ReadKey().KeyChar != 's';
 Console.Clear();
 
 if (me.IsClient)
@@ -12,8 +12,9 @@ if (me.IsClient)
 
     Console.Write("Write address to connect: ");
     var endPoint = Console.ReadLine()?.Trim();
-    var other = me.Client.Connect(endPoint);
     Console.WriteLine("Connecting...");
+    var other = me.Client.Connect(endPoint);
+    me.Send($"{me.Name} connected".Bytes());
 
     Info(other);
 
@@ -40,7 +41,7 @@ else
 
     var address = me.Server.Start();
     SimpleChat.Clipboard.SetText(address.ToString());
-    Console.WriteLine(address);
+    Console.WriteLine($"{address} (copied to clipboard)");
 
     me.Server.ListenAsync();
     Console.WriteLine("Messages of connected clients:");

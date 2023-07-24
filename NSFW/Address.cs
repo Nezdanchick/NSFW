@@ -6,8 +6,8 @@ namespace NSFW
 {
     public static class Address
     {
-        public static IPAddress LocalIP { get => GetLocal(); }
         public const int DefaultPort = 8888;
+        public static IPAddress LocalIP { get => GetLocal(); }
         public static IPEndPoint DefaultEndPoint { get => new(LocalIP, DefaultPort); }
 
         /// <summary>

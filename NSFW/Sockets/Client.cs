@@ -1,9 +1,9 @@
 ﻿using System.Net;
 using System.Net.Sockets;
 
-namespace NSFW.Destination
+namespace NSFW.Sockets
 {
-    public class Client : NetDestination
+    public class Client : TcpSocket
     {
         public string? Name { get; private set; }
 
