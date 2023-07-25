@@ -14,7 +14,7 @@ if (me.IsClient)
     var endPoint = Console.ReadLine()?.Trim();
     Console.WriteLine("Connecting...");
     var other = me.Client.Connect(endPoint);
-    me.Send($"{me.Name} connected".Bytes());
+    me.Send($"{me.Name} connected".Serialize());
 
     Info(other);
 
@@ -25,13 +25,13 @@ if (me.IsClient)
         if (Console.KeyAvailable)
         {
             line = Console.ReadLine() ?? "";
-            me.Send(line.Bytes());
+            me.Send(line.Serialize());
         }
 
         var data = me.Receive();
         if (data == null)
             continue;
-        line = data.String();
+        line = data.Deserialize<string>();
         Console.WriteLine(line);
     }
 }
@@ -52,7 +52,7 @@ else
         var data = me.Receive();
         if (data == null)
             continue;
-        line = data.String();
+        line = data.Deserialize<string>();
         me.Send(data);
         Console.WriteLine(line);
     }

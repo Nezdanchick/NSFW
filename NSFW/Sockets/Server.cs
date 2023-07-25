@@ -33,6 +33,7 @@ namespace NSFW.Sockets
             if (client.RemoteEndPoint == null)
                 throw new Exception("Client is null");
 
+            Thread.Sleep(1000);
             Clients.Add(new Client(client));
         }
         public void ListenAsync()
