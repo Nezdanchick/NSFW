@@ -15,29 +15,11 @@ namespace NSFW
 
         public TcpSocket Socket => IsClient ? Client : Server;
 
-        public Client Client
-        {
-            get
-            {
-                if (!IsClient)
-                    IsClient = true;
-                return _client;
-            }
-            private set => _client = value;
-        }
-        public Server Server
-        {
-            get
-            {
-                if (IsClient)
-                    IsClient = false;
-                return _server;
-            }
-            private set => _server = value;
-        }
+        public Client Client => _client;
+        public Server Server => _server;
 
-        private Client _client = new();
-        private Server _server = new();
+        private readonly Client _client = new();
+        private readonly Server _server = new();
         #endregion
 
         #region Constructors

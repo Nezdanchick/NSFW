@@ -10,7 +10,9 @@ namespace NSFW.Sockets
         public Client() : base() { }
         public Client(Socket socket) : base(socket) { }
 
-        public Server Connect(string? endPoint)
+        public override event Action OnConnect = () => { };
+
+        public void Connect(string? endPoint)
         {
             try
             {
@@ -23,7 +25,7 @@ namespace NSFW.Sockets
                 Thread.Sleep(2000);
                 Environment.Exit(-1);
             }
-            return new Server();
+            OnConnect();
         }
     }
 }

@@ -4,7 +4,9 @@ namespace NSFW.Sockets
 {
     public abstract class TcpSocket : IDisposable
     {
-        internal Socket? Socket { get; set; } = new(SocketType.Stream, ProtocolType.Tcp);
+        public abstract event Action OnConnect;
+
+        internal Socket? Socket { get; private set; } = new(SocketType.Stream, ProtocolType.Tcp);
 
         public TcpSocket() { }
         public TcpSocket(Socket socket) =>

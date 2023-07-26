@@ -6,6 +6,15 @@ Console.WriteLine("Type 's' to start server, else client will be started");
 me.IsClient = Console.ReadKey().KeyChar != 's';
 Console.Clear();
 
+me.Client.OnConnect += () =>
+{
+    Console.WriteLine("Connected to server!");
+};
+me.Server.OnConnect += () =>
+{
+    Console.WriteLine("Client connected!");
+};
+
 if (me.IsClient)
 {
     //Client

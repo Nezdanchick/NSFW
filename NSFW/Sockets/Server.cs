@@ -9,6 +9,8 @@ namespace NSFW.Sockets
 
         public bool IsStarted { get; private set; } = false;
 
+        public override event Action OnConnect = () => { };
+
         public IPEndPoint Start() =>
             Start(0);
         public IPEndPoint Start(int port)
@@ -34,8 +36,8 @@ namespace NSFW.Sockets
             Socket clientSocket = Socket.Accept() ?? throw new Exception("Client is null");
             var client = new Client(clientSocket);
 
-            Thread.Sleep(1000);
             Clients.Add(client);
+            OnConnect();
         }
         /// <summary>
         /// Listen all incoming connecions every 1 second
@@ -70,7 +72,10 @@ namespace NSFW.Sockets
         {
             for (int i = 0; i < Clients.Count; i++)
             {
-                var data = DataExchange.Receive(Clients[i].Socket);
+                var client = Clients[i];
+                if (client == null)
+                    continue;
+                var data = DataExchange.Receive(client.Socket);
                 if (data != null)
                     return data;
             }
