@@ -13,10 +13,8 @@ if (me.IsClient)
     Console.Write("Write address to connect: ");
     var endPoint = Console.ReadLine()?.Trim();
     Console.WriteLine("Connecting...");
-    var other = me.Client.Connect(endPoint);
+    me.Client.Connect(endPoint);
     me.Send($"{me.Name} connected".Serialize());
-
-    Info(other);
 
     Console.WriteLine("To close this program type \"exit\"");
     string line = "";
@@ -25,13 +23,13 @@ if (me.IsClient)
         if (Console.KeyAvailable)
         {
             line = Console.ReadLine() ?? "";
-            me.Send(line.Serialize());
+            me.Send(line);
         }
 
-        var data = me.Receive();
+        var data = me.Receive<string>();
         if (data == null)
             continue;
-        line = data.Deserialize<string>();
+        line = data;
         Console.WriteLine(line);
     }
 }
@@ -44,24 +42,17 @@ else
     Console.WriteLine($"{address} (copied to clipboard)");
 
     me.Server.ListenAsync();
+    while (me.Server.Clients.Count == 0);
     Console.WriteLine("Messages of connected clients:");
 
     string? line = "";
     while (line != "exit")
     {
-        var data = me.Receive();
+        var data = me.Receive<string>();
         if (data == null)
             continue;
-        line = data.Deserialize<string>();
+        line = data;
         me.Send(data);
         Console.WriteLine(line);
     }
-}
-
-static void Info(User user)
-{
-    Console.Clear();
-    Console.WriteLine("Connected to:");
-    Console.WriteLine(user);
-    Console.WriteLine($"This chat with your friend {user.Name}!");
 }

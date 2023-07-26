@@ -10,7 +10,7 @@ namespace NSFW.Sockets
         public Client() : base() { }
         public Client(Socket socket) : base(socket) { }
 
-        public User Connect(string? endPoint)
+        public Server Connect(string? endPoint)
         {
             try
             {
@@ -23,7 +23,7 @@ namespace NSFW.Sockets
                 Thread.Sleep(2000);
                 Environment.Exit(-1);
             }
-            return new User("smb");
+            return new Server();
         }
     }
 }

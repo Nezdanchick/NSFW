@@ -2,7 +2,7 @@
 
 namespace NSFW.Sockets
 {
-    public class TcpSocket : IDisposable
+    public abstract class TcpSocket : IDisposable
     {
         internal Socket? Socket { get; set; } = new(SocketType.Stream, ProtocolType.Tcp);
 
@@ -10,8 +10,11 @@ namespace NSFW.Sockets
         public TcpSocket(Socket socket) =>
             Socket = socket;
 
-        public void Send(byte[] data) =>
-            DataExchange.Send(Socket, data);
+        public void Send(byte[]? data)
+        {
+            if (data != null)
+                DataExchange.Send(Socket, data);
+        }
         public byte[]? Receive() =>
             DataExchange.Receive(Socket);
         public void Dispose()

@@ -7,10 +7,10 @@ namespace NSFW
         public static User Current { get; } = // Singletone
             new User(Environment.UserName);
 
-        public string Name { get => Client.Name ?? _name; set => _name = value; }
+        public string Name { get => _client.Name ?? _name; set => _name = value; }
         private string _name = "User";
 
-        #region Client Server
+        #region Client and Server sockets
         public bool IsClient;
 
         public Client Client
@@ -39,7 +39,7 @@ namespace NSFW
         #endregion
 
         #region Constructors
-        internal User()
+        private User()
         {
             Console.CancelKeyPress +=
                 (object? sender, ConsoleCancelEventArgs e) => Environment.Exit(0);
@@ -48,24 +48,26 @@ namespace NSFW
                 (object? sender, EventArgs e) => Dispose();
             // Dispose() on ProcessExit or CancelKeyPress
         }
-        internal User(string name) : this() =>
+        private User(string name) : this() =>
             Name = name;
         #endregion
 
-        public void Send(byte[] data)
+        public void Send<T>(T data)
         {
             if (IsClient)
-                Client.Send(data);
+                Client.Send(data?.Serialize());
             else
-                Server.Send(data);
+                Server.Send(data?.Serialize());
         }
 
-        public byte[]? Receive()
+        public T? Receive<T>()
         {
+            byte[]? data;
             if (IsClient)
-                return Client.Receive();
+                data = Client.Receive();
             else
-                return Server.Receive();
+                data = Server.Receive();
+            return (data == null) ? default : data.Deserialize<T>();
         }
 
         public void Dispose()

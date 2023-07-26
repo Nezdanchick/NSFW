@@ -20,7 +20,10 @@ namespace NSFW.Sockets
             IsStarted = true;
             return new IPEndPoint(address, port);
         }
-
+        /// <summary>
+        /// Listen for connection
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void Listen()
         {
             if (Socket == null || !IsStarted)
@@ -28,19 +31,20 @@ namespace NSFW.Sockets
 
             Socket.Listen();
 
-            Socket client = Socket.Accept();
-
-            if (client.RemoteEndPoint == null)
-                throw new Exception("Client is null");
+            Socket clientSocket = Socket.Accept() ?? throw new Exception("Client is null");
+            var client = new Client(clientSocket);
 
             Thread.Sleep(1000);
-            Clients.Add(new Client(client));
+            Clients.Add(client);
         }
+        /// <summary>
+        /// Listen all incoming connecions every 1 second
+        /// </summary>
         public void ListenAsync()
         {
             Task.Run(() =>
             {
-                while (true)
+                while (IsStarted)
                 {
                     Listen();
                     Task.Delay(1000);
@@ -51,8 +55,10 @@ namespace NSFW.Sockets
         /// Send data to all clients
         /// </summary>
         /// <param name="data"></param>
-        public new void Send(byte[] data)
+        public new void Send(byte[]? data)
         {
+            if (data == null)
+                return;
             for (int i = 0; i < Clients.Count; i++)
                 DataExchange.Send(Clients[i].Socket, data);
         }
