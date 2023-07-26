@@ -55,7 +55,7 @@ namespace NSFW.Sockets
         /// Send data to all clients
         /// </summary>
         /// <param name="data"></param>
-        public new void Send(byte[]? data)
+        public override void Send(byte[]? data)
         {
             if (data == null)
                 return;
@@ -66,7 +66,7 @@ namespace NSFW.Sockets
         /// Get data from all clients
         /// </summary>
         /// <returns></returns>
-        public new byte[]? Receive()
+        public override byte[]? Receive()
         {
             for (int i = 0; i < Clients.Count; i++)
             {

@@ -13,6 +13,8 @@ namespace NSFW
         #region Client and Server sockets
         public bool IsClient;
 
+        public TcpSocket Socket => IsClient ? Client : Server;
+
         public Client Client
         {
             get
@@ -52,23 +54,11 @@ namespace NSFW
             Name = name;
         #endregion
 
-        public void Send<T>(T data)
-        {
-            if (IsClient)
-                Client.Send(data?.Serialize());
-            else
-                Server.Send(data?.Serialize());
-        }
+        public void Send<T>(T data) =>
+            Socket.Send(data?.Serialize());
 
-        public T? Receive<T>()
-        {
-            byte[]? data;
-            if (IsClient)
-                data = Client.Receive();
-            else
-                data = Server.Receive();
-            return (data == null) ? default : data.Deserialize<T>();
-        }
+        public T? Receive<T>() =>
+            Socket.Receive().Deserialize<T>() ?? default;
 
         public void Dispose()
         {

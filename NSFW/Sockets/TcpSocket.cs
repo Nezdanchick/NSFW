@@ -10,12 +10,12 @@ namespace NSFW.Sockets
         public TcpSocket(Socket socket) =>
             Socket = socket;
 
-        public void Send(byte[]? data)
+        public virtual void Send(byte[]? data)
         {
             if (data != null)
                 DataExchange.Send(Socket, data);
         }
-        public byte[]? Receive() =>
+        public virtual byte[]? Receive() =>
             DataExchange.Receive(Socket);
         public void Dispose()
         {
