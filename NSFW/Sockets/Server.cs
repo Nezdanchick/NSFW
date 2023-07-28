@@ -1,4 +1,7 @@
-﻿using System.Net;
+﻿using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 
 namespace NSFW.Sockets

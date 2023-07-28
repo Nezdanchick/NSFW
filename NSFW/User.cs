@@ -1,4 +1,6 @@
-﻿using NSFW.Sockets;
+﻿using System;
+using System.Threading;
+using NSFW.Sockets;
 
 namespace NSFW
 {
