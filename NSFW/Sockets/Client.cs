@@ -5,6 +5,9 @@ using System.Net.Sockets;
 
 namespace NSFW.Sockets
 {
+    /// <summary>
+    /// Wrapper over a socket that provides client capabilities
+    /// </summary>
     public class Client : TcpSocket
     {
         public string? Name { get; private set; }
@@ -29,5 +32,12 @@ namespace NSFW.Sockets
             }
             OnConnect();
         }
+        public override void Send(byte[]? data)
+        {
+            if (data != null)
+                DataExchange.Send(Socket, data);
+        }
+        public override byte[]? Receive() =>
+            DataExchange.Receive(Socket);
     }
 }

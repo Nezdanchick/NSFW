@@ -4,6 +4,9 @@ using System.Net.Sockets;
 
 namespace NSFW
 {
+    /// <summary>
+    /// Class for transmitting data over sockets
+    /// </summary>
     public static class DataExchange
     {
         /// <summary>

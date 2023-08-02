@@ -6,6 +6,9 @@ using System.Net.Sockets;
 
 namespace NSFW.Sockets
 {
+    /// <summary>
+    /// Wrapper over a socket that provides server capabilities
+    /// </summary>
     public class Server : TcpSocket
     {
         public List<Client> Clients { get; } = new();

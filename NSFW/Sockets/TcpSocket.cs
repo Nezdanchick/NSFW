@@ -13,13 +13,14 @@ namespace NSFW.Sockets
         public TcpSocket(Socket socket) =>
             Socket = socket;
 
-        public virtual void Send(byte[]? data)
-        {
-            if (data != null)
-                DataExchange.Send(Socket, data);
-        }
-        public virtual byte[]? Receive() =>
-            DataExchange.Receive(Socket);
+        public abstract void Send(byte[]? data);
+        public abstract byte[]? Receive();
+
+        public void Send<T>(T data) =>
+            Send(data?.Serialize());
+        public T? Receive<T>() =>
+            Receive().Deserialize<T>() ?? default;
+
         public void Dispose()
         {
             Socket?.Close();

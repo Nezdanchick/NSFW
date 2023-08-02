@@ -5,12 +5,15 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 namespace NSFW
 {
+    /// <summary>
+    /// Extension class for data serialization and deserialization
+    /// </summary>
     public static class Data
     {
         /// <summary>
         /// Serialize object to byte array
         /// </summary>
-        /// <param name="line"></param>
+        /// <param name="target">Object for serialization</param>
         /// <returns></returns>
         public static byte[] Serialize(this object target)
         {
@@ -28,7 +31,7 @@ namespace NSFW
         /// <summary>
         /// Deserialize byte array to object
         /// </summary>
-        /// <param name="bytes"></param>
+        /// <param name="bytes">Array for deserialization</param>
         /// <returns></returns>
         public static T? Deserialize<T>(this byte[]? bytes)
         {
