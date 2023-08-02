@@ -3,29 +3,21 @@
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <NoWin32Manifest>true</NoWin32Manifest>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <SignAssembly>False</SignAssembly>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    
     <Title>Network Simplify Framework</Title>
+    <PackageVersion>1.0.1</PackageVersion>
     <Company>Nezdanchick</Company>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageLicenseFile>license.md</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
-    <PackageReadmeFile>readme.md</PackageReadmeFile>
-    <PackageIcon>icon.png</PackageIcon>
     <PackageProjectUrl>https://github.com/Nezdanchick/NSFW</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Nezdanchick/NSFW</RepositoryUrl>
-    <EnforceCodeStyleInBuild>False</EnforceCodeStyleInBuild>
-    <NoWin32Manifest>true</NoWin32Manifest>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <FileAlignment>512</FileAlignment>
   </PropertyGroup>
 
   <ItemGroup>
