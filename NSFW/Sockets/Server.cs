@@ -11,14 +11,28 @@ namespace NSFW.Sockets
     /// </summary>
     public class Server : TcpSocket
     {
+        /// <summary>
+        /// All connected clients
+        /// </summary>
         public List<Client> Clients { get; } = new();
 
+        /// <summary>
+        /// Shows if the server is started
+        /// </summary>
         public bool IsStarted { get; private set; } = false;
 
-        public override event Action OnConnect = () => { };
-
+        /// <summary>
+        /// Start server
+        /// </summary>
+        /// <returns>IPEndPoint on which the server is started</returns>
         public IPEndPoint Start() =>
             Start(0);
+
+        /// <summary>
+        /// Start server on specified port
+        /// </summary>
+        /// <param name="port">Server listening port</param>
+        /// <returns>IPEndPoint on which the server is started</returns>
         public IPEndPoint Start(int port)
         {
             IPEndPoint ipPoint = new(IPAddress.Any, port);
@@ -31,7 +45,7 @@ namespace NSFW.Sockets
         /// <summary>
         /// Listen for connection
         /// </summary>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception">If server not started</exception>
         public void Listen()
         {
             if (Socket == null || !IsStarted)
@@ -43,7 +57,6 @@ namespace NSFW.Sockets
             var client = new Client(clientSocket);
 
             Clients.Add(client);
-            OnConnect();
         }
         /// <summary>
         /// Listen all incoming connecions every 1 second
@@ -62,18 +75,18 @@ namespace NSFW.Sockets
         /// <summary>
         /// Send data to all clients
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="data">Data to send</param>
         public override void Send(byte[]? data)
         {
             if (data == null)
                 return;
             for (int i = 0; i < Clients.Count; i++)
-                DataExchange.Send(Clients[i].Socket, data);
+                Clients[i].Send(data);
         }
         /// <summary>
-        /// Get data from all clients
+        /// Receive data from all clients
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Received data from clients</returns>
         public override byte[]? Receive()
         {
             for (int i = 0; i < Clients.Count; i++)
@@ -81,12 +94,15 @@ namespace NSFW.Sockets
                 var client = Clients[i];
                 if (client == null)
                     continue;
-                var data = DataExchange.Receive(client.Socket);
+                var data = client.Receive();
                 if (data != null)
                     return data;
             }
             return null;
         }
+        /// <summary>
+        /// Dispose server
+        /// </summary>
         public new void Dispose()
         {
             IsStarted = false;

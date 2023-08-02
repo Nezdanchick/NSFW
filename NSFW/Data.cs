@@ -14,7 +14,7 @@ namespace NSFW
         /// Serialize object to byte array
         /// </summary>
         /// <param name="target">Object for serialization</param>
-        /// <returns></returns>
+        /// <returns>Serialized byte array</returns>
         public static byte[] Serialize(this object target)
         {
             byte[] bytes;
@@ -32,7 +32,7 @@ namespace NSFW
         /// Deserialize byte array to object
         /// </summary>
         /// <param name="bytes">Array for deserialization</param>
-        /// <returns></returns>
+        /// <returns>Deserialized object</returns>
         public static T? Deserialize<T>(this byte[]? bytes)
         {
             if (bytes == null)
@@ -43,10 +43,7 @@ namespace NSFW
             {
                 stream.Seek(0, 0);
 #               pragma warning disable SYSLIB0011  // Legacy type
-                try
-                {
-                    @object = (T)formatter.Deserialize(stream);
-                } catch (Exception) { return default; }
+                @object = (T)formatter.Deserialize(stream);
 #               pragma warning restore SYSLIB0011
             }
             return @object;
