@@ -10,6 +10,9 @@ namespace NSFW
 	{
 		private static readonly User Current = new();
 
+		/// <summary>
+		/// Username
+		/// </summary>
 		public string Name { get => _name ?? _client.Name ?? "User"; set => _name = value; }
 		private string? _name;
 
@@ -23,12 +26,19 @@ namespace NSFW
 			AppDomain.CurrentDomain.ProcessExit +=
 				(object? sender, EventArgs e) => Dispose();
 		}
+		/// <summary>
+		/// Dispose client and server
+		/// </summary>
 		public void Dispose()
 		{
 			_server?.Dispose();
 			_client?.Dispose();
 			GC.SuppressFinalize(this);
 		}
+		/// <summary>
+		/// Convert to string
+		/// </summary>
+		/// <returns></returns>
 		public override string ToString() =>
 			$"User {Name}";
 	}
