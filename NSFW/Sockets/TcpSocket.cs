@@ -8,6 +8,11 @@ namespace NSFW.Sockets
     /// </summary>
     public abstract class TcpSocket : IDisposable
     {
+        /// <summary>
+        /// Is the data available to receive
+        /// </summary>
+        public bool DataAvailable => Socket?.IsAvailable() ?? false;
+
         private protected Socket? Socket { get; set; } = new(SocketType.Stream, ProtocolType.Tcp);
 
         /// <summary>

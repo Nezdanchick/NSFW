@@ -8,7 +8,7 @@ namespace NSFW
     /// <summary>
     /// Extension class for data serialization and deserialization
     /// </summary>
-    public static class Data
+    public static class DataTransfer
     {
         /// <summary>
         /// Serialize object to byte array
