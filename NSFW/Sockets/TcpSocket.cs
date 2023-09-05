@@ -13,6 +13,11 @@ namespace NSFW.Sockets
         /// </summary>
         public bool DataAvailable => Socket?.IsAvailable() ?? false;
 
+        /// <summary>
+        /// Is the socket connected to a remote host
+        /// </summary>
+        public bool Connected => Socket?.Connected ?? false;
+
         private protected Socket? Socket { get; set; } = new(SocketType.Stream, ProtocolType.Tcp);
 
         /// <summary>

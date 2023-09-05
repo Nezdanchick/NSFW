@@ -4,7 +4,7 @@ using NSFW.Sockets;
 
 namespace NSFW
 {
-    public partial class User
+    public partial class User : IDisposable
     {
         /// <summary>
         /// Client representation
@@ -17,5 +17,15 @@ namespace NSFW
 
         private readonly Client _client = new();
         private readonly Server _server = new();
+
+        /// <summary>
+        /// Dispose client and server
+        /// </summary>
+        public void Dispose()
+        {
+            _server?.Dispose();
+            _client?.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }

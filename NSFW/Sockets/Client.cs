@@ -12,11 +12,6 @@ namespace NSFW.Sockets
     public class Client : TcpSocket
     {
         /// <summary>
-        /// Client name
-        /// </summary>
-        public string? Name { get; private set; }
-
-        /// <summary>
         /// Create new client
         /// </summary>
         public Client() : base() { }
