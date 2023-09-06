@@ -30,14 +30,10 @@ namespace NSFW.Sockets
             try
             {
                 var address = IPEndPoint.Parse(endPoint ?? "");
-                Socket?.Connect(address);
+                Socket?.ConnectAsync(address);
             }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-                Thread.Sleep(2000);
-                Environment.Exit(-1);
-            }
+            catch { }
+            Thread.Sleep(100);
         }
         /// <summary>
         /// Send data to server

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace NSFW.Sockets
 {
@@ -12,6 +12,10 @@ namespace NSFW.Sockets
     public class Server : TcpSocket
     {
         /// <summary>
+        /// Occurs when client connects
+        /// </summary>
+        public event Action OnClientConnected = () => { };
+        /// <summary>
         /// All connected clients
         /// </summary>
         public List<Client> Clients { get; } = new();
@@ -20,6 +24,11 @@ namespace NSFW.Sockets
         /// Shows if the server is started
         /// </summary>
         public bool IsStarted { get; private set; } = false;
+
+        /// <summary>
+        /// Shows if the server is listening connections
+        /// </summary>
+        public bool IsListening { get; private set; } = false;
 
         /// <summary>
         /// Start server
@@ -35,6 +44,9 @@ namespace NSFW.Sockets
         /// <returns>IPEndPoint on which the server is started</returns>
         public IPEndPoint Start(int port)
         {
+            if (IsStarted)
+                return new IPEndPoint(Address.LocalIP, port);
+
             IPEndPoint ipPoint = new(IPAddress.Any, port);
             Socket?.Bind(ipPoint);
             var address = Address.GetLocal();
@@ -49,28 +61,38 @@ namespace NSFW.Sockets
         public void Listen()
         {
             if (Socket == null || !IsStarted)
-                throw new Exception("Can't listen: socket is null");
+                throw new Exception("Can't listen: start the server");
 
             Socket.Listen();
 
-            Socket clientSocket = Socket.Accept() ?? throw new Exception("Client is null");
-            var client = new Client(clientSocket);
+            try
+            {
+                Socket clientSocket = Socket.Accept();
+                var client = new Client(clientSocket);
 
-            Clients.Add(client);
+                Clients.Add(client);
+
+                OnClientConnected();
+            }
+            catch { }
         }
         /// <summary>
-        /// Listen all incoming connecions every 1 second
+        /// Listen all incoming connecions
         /// </summary>
-        public void ListenAsync()
+        /// <param name="delay">delay in milliseconds</param>
+        public void ListenAsync(int delay = 1000)
         {
-            Task.Run(() =>
-            {
-                while (IsStarted)
+            if (!IsListening)
+                Task.Run(() =>
                 {
-                    Listen();
-                    Task.Delay(1000);
-                }
-            });
+                    IsListening = true;
+                    while (IsStarted)
+                    {
+                        Listen();
+                        Task.Delay(delay);
+                    }
+                    IsListening = false;
+                });
         }
         /// <summary>
         /// Send data to all clients
