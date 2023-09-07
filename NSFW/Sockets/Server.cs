@@ -16,6 +16,10 @@ namespace NSFW.Sockets
         /// </summary>
         public event Action OnClientConnected = () => { };
         /// <summary>
+        /// EndPoint isn't null when server is started
+        /// </summary>
+        public IPEndPoint? EndPoint;
+        /// <summary>
         /// All connected clients
         /// </summary>
         public List<Client> Clients { get; } = new();
@@ -34,7 +38,7 @@ namespace NSFW.Sockets
         /// Start server
         /// </summary>
         /// <returns>IPEndPoint on which the server is started</returns>
-        public IPEndPoint Start() =>
+        public void Start() =>
             Start(0);
 
         /// <summary>
@@ -42,17 +46,17 @@ namespace NSFW.Sockets
         /// </summary>
         /// <param name="port">Server listening port</param>
         /// <returns>IPEndPoint on which the server is started</returns>
-        public IPEndPoint Start(int port)
+        public void Start(int port)
         {
             if (IsStarted)
-                return new IPEndPoint(Address.LocalIP, port);
+                return;
 
             IPEndPoint ipPoint = new(IPAddress.Any, port);
             Socket?.Bind(ipPoint);
             var address = Address.GetLocal();
             port = Address.GetPort(Socket?.LocalEndPoint);
             IsStarted = true;
-            return new IPEndPoint(address, port);
+            EndPoint = new IPEndPoint(address, port);
         }
         /// <summary>
         /// Listen for connection
@@ -93,6 +97,29 @@ namespace NSFW.Sockets
                     }
                     IsListening = false;
                 });
+        }
+        /// <summary>
+        /// Resends received data to all clients once
+        /// </summary>
+        public void Broadcast()
+        {
+            var data = Receive();
+            if (data != null)
+                Send(data);
+        }
+        /// <summary>
+        /// Resends received data to all clients while connected
+        /// </summary>
+        public void BroadcastAsync(int delay = 20)
+        {
+            Task.Run(() =>
+            {
+                while (Socket != null)
+                {
+                    Broadcast();
+                    Task.Delay(delay);
+                }
+            });
         }
         /// <summary>
         /// Send data to all clients

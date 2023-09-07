@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NSFW
 {
-	public partial class User : IDisposable
+	public partial class User
 	{
         private static readonly User Current = new();
 
