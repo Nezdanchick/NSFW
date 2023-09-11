@@ -18,6 +18,10 @@
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/Nezdanchick/NSFW</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Nezdanchick/NSFW</RepositoryUrl>
+    <Version>1.0.2</Version>
+    <Authors>Nezdanchick</Authors>
+    <Description>Network Simplify Framework</Description>
+    <Product>$(AssemblyName)</Product>
   </PropertyGroup>
 
   <ItemGroup>

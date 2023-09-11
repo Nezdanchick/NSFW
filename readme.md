@@ -1,6 +1,9 @@
 # NSFW
 ![icon](icon.png)
 
+#### Examples | Примеры
+[LAN Chat | Чат по локальной сети](https://github.com/Nezdanchick/NetworkChat)
+
 ### English
 A simple wrapper over .net sockets.
 Provides a User class that has server and client fields. When using the client box, you can connect to the server, and the server box starts listening for incoming connections.
