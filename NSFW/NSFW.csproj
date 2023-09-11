@@ -10,18 +10,17 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     
     <Title>Network Simplify Framework</Title>
-    <PackageVersion>1.0.1</PackageVersion>
-    <Company>Nezdanchick</Company>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
     <PackageLicenseFile>license.md</PackageLicenseFile>
     <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/Nezdanchick/NSFW</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Nezdanchick/NSFW</RepositoryUrl>
-    <Version>1.0.2</Version>
+    <Version>1.0.2.0</Version>
     <Authors>Nezdanchick</Authors>
     <Description>Network Simplify Framework</Description>
     <Product>$(AssemblyName)</Product>
+    <SignAssembly>False</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>
